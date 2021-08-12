@@ -6,6 +6,10 @@ import Shopify, { ApiVersion } from "@shopify/shopify-api";
 import Koa from "koa";
 import next from "next";
 import Router from "koa-router";
+const serve = require("koa-static");
+const cors = require("@koa/cors");
+import Axios from "axios"
+import localStorage from "localStorage"
 
 dotenv.config();
 const port = parseInt(process.env.PORT, 10) || 8081;
@@ -34,6 +38,8 @@ app.prepare().then(async () => {
   const server = new Koa();
   const router = new Router();
   server.keys = [Shopify.Context.API_SECRET_KEY];
+  server.use(serve(__dirname + "/public"));
+  server.use(cors());
   server.use(
     createShopifyAuth({
       async afterAuth(ctx) {
@@ -41,6 +47,23 @@ app.prepare().then(async () => {
         const { shop, accessToken, scope } = ctx.state.shopify;
         const host = ctx.query.host;
         ACTIVE_SHOPIFY_SHOPS[shop] = scope;
+
+        localStorage.setItem("shop", shop);
+
+        fetch(`https://${shop}/admin/api/2021-07/script_tags.json`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-Shopify-Access-Token': accessToken,
+                    },
+                    body: JSON.stringify({
+                        "script_tag": {
+                            "event": "onload"
+                            , "src": `${process.env.HOST}/fancy.js`
+                        }
+                    })
+                });
 
         const response = await Shopify.Webhooks.Registry.register({
           shop,
@@ -72,6 +95,9 @@ app.prepare().then(async () => {
   router.post("/webhooks", async (ctx) => {
     try {
       await Shopify.Webhooks.Registry.process(ctx.req, ctx.res);
+      const shop = localStorage.getItem("shop");
+      Axios.post("http://localhost:8080/deleteapp",
+      {shop:shop});
       console.log(`Webhook processed, returned status code 200`);
     } catch (error) {
       console.log(`Failed to process webhook: ${error}`);

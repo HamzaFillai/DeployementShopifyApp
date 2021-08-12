@@ -1,0 +1,67 @@
+@import "https://use.fontawesome.com/releases/v5.5.0/css/all.css";
+
+.btn
+{
+    width: 293px;
+    height: 63px;
+    left: 726px;
+    top: 267px;
+    border: 0;
+    
+    background: #50AD55;
+    border-radius: 6px;
+
+    cursor: pointer;   
+    margin-bottom: 7px;
+
+    
+}
+
+.anim
+{
+    animation: infinite;
+}
+
+.btn
+{
+    margin-bottom: 100px;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 20px;
+    /* identical to box height, or 83% */
+    
+    text-align: center;
+    
+    color: #FFFFFF;
+}
+
+img
+{
+    width: 30px;
+}
+
+.alignbtn
+{
+    text-align: center;
+}
+
+.imagechat
+{
+    float: right;
+}
+
+.imagechat img
+{
+    width: 100px;
+    height: 76px;
+    margin-top: 50px;
+    margin-right: 100px;
+}
+
+i
+{
+    color: white;
+    font-size: 25px;
+    margin-right: 5px;
+}

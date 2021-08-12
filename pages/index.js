@@ -1,9 +1,12 @@
 import { Heading, Page } from "@shopify/polaris";
+import React from 'react'
+import Front from "./frontcart"
 
-const Index = () => (
-  <Page>
-    <Heading>Shopify app with Node and React 🎉</Heading>
-  </Page>
-);
+export default function Index() {
+  return (
+    <Page>
+      <Front/>
+    </Page>
+  )
+}
 
-export default Index;
